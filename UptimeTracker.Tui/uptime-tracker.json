@@ -1,6 +1,6 @@
 {
-  "testMode": true,
-  "warn":    { "after": "00:00:30" },
-  "reboot":  { "after": "00:01:00" },
-  "overdue": { "after": "00:01:30", "flashIntervalMs": 500 }
+  "testMode": false,
+  "warn":    { "after": "11:00:00" },
+  "reboot":  { "after": "11:30:00" },
+  "overdue": { "after": "12:00:00", "flashIntervalMs": 500 }
 }

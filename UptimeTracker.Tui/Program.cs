@@ -26,7 +26,10 @@ internal sealed class Program
             var originalForeground = System.Console.ForegroundColor;
             var originalBackground = System.Console.BackgroundColor;
 
-            // 4. Register Ctrl+C handler
+            // 4. Clear the screen
+            System.Console.Clear();
+
+            // 5. Register Ctrl+C handler
             using var cts = new CancellationTokenSource();
             System.Console.CancelKeyPress += (_, e) =>
             {
