@@ -16,6 +16,7 @@ internal static class ConfigLoader
     {
         // 1. File existence check
         var configPath = Path.Combine(executableDirectory, "uptime-tracker.json");
+
         if (!File.Exists(configPath))
         {
             throw new ConfigurationException($"Error: Configuration file not found: {configPath}");
@@ -24,7 +25,9 @@ internal static class ConfigLoader
         // 2. JSON deserialization
         var json = File.ReadAllText(configPath);
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        
         RawConfig? raw;
+        
         try
         {
             raw = JsonSerializer.Deserialize<RawConfig>(json, options);
@@ -72,6 +75,13 @@ internal static class ConfigLoader
         // Parse flash pairs for overdue
         FlashPair pairA;
         FlashPair pairB;
+
+        if (raw.Overdue.Flash is null)
+        {
+            pairA = new FlashPair(ConsoleColor.Red, ConsoleColor.White);
+            pairB = new FlashPair(ConsoleColor.White, ConsoleColor.Red);
+        }
+        
         if (raw.Overdue.Flash is { Length: >= 2 })
         {
             pairA = ParseFlashPair(raw.Overdue.Flash[0], "overdue", "flash[0]");
@@ -97,6 +107,7 @@ internal static class ConfigLoader
 
         // 7. flashIntervalMs validation
         var flashIntervalMs = 1000;
+
         if (raw.Overdue.FlashIntervalMs.HasValue)
         {
             if (raw.Overdue.FlashIntervalMs.Value <= 0)
@@ -133,6 +144,7 @@ internal static class ConfigLoader
         }
 
         var parts = value.Split(':');
+
         if (parts.Length != 3)
         {
             throw new ConfigurationException(

@@ -1,8 +1,6 @@
 namespace UptimeTracker.Exceptions;
 
-internal sealed class ConfigurationException : Exception
+internal sealed class ConfigurationException(string message) : Exception(message)
 {
     public int ExitCode { get; } = 1;
-
-    public ConfigurationException(string message) : base(message) { }
 }

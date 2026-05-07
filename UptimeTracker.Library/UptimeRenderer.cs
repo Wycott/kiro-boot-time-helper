@@ -4,27 +4,14 @@ using UptimeTracker.Models;
 
 namespace UptimeTracker;
 
-internal sealed class UptimeRenderer
+internal sealed class UptimeRenderer(
+    IBootTimeProvider bootTimeProvider,
+    ThresholdConfiguration config,
+    IConsoleWriter console,
+    bool testMode = false,
+    Func<int, CancellationToken, Task>? delayFunc = null)
 {
-    private readonly IBootTimeProvider bootTimeProvider;
-    private readonly ThresholdConfiguration config;
-    private readonly IConsoleWriter console;
-    private readonly bool testMode;
-    private readonly Func<int, CancellationToken, Task>? delayFunc;
-
-    public UptimeRenderer(
-        IBootTimeProvider bootTimeProvider,
-        ThresholdConfiguration config,
-        IConsoleWriter console,
-        bool testMode = false,
-        Func<int, CancellationToken, Task>? delayFunc = null)
-    {
-        this.bootTimeProvider = bootTimeProvider;
-        this.config = config;
-        this.console = console;
-        this.testMode = testMode;
-        this.delayFunc = delayFunc;
-    }
+    private readonly bool testMode = testMode;
 
     public async Task RunAsync(CancellationToken cancellationToken)
     {
@@ -49,7 +36,9 @@ internal sealed class UptimeRenderer
 
                 // Write "Uptime:" label in bold (ANSI escape), then the value in color
                 console.Write("\x1b[1mUptime:\x1b[0m ");
+
                 ApplyColors(colorState);
+                
                 console.Write($"{UptimeFormatter.Format(uptime)}   ");
                 console.ResetColor();
 
@@ -62,9 +51,9 @@ internal sealed class UptimeRenderer
 
                 try
                 {
-                    if (this.delayFunc != null)
+                    if (delayFunc != null)
                     {
-                        await this.delayFunc(delayMs, cancellationToken);
+                        await delayFunc(delayMs, cancellationToken);
                     }
                     else
                     {
@@ -92,25 +81,26 @@ internal sealed class UptimeRenderer
         {
             case ColorState.Warn warn:
                 console.ForegroundColor = warn.Foreground;
+                
                 if (warn.Background.HasValue)
                 {
                     console.BackgroundColor = warn.Background.Value;
                 }
-                break;
 
+                break;
             case ColorState.Reboot reboot:
                 console.ForegroundColor = reboot.Foreground;
+                
                 if (reboot.Background.HasValue)
                 {
                     console.BackgroundColor = reboot.Background.Value;
                 }
-                break;
 
+                break;
             case ColorState.Overdue overdue:
                 console.ForegroundColor = overdue.ActivePair.Foreground;
                 console.BackgroundColor = overdue.ActivePair.Background;
                 break;
-
             case ColorState.Default:
             default:
                 // No color change for default state
