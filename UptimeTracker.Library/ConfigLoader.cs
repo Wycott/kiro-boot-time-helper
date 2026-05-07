@@ -17,7 +17,9 @@ internal static class ConfigLoader
         // 1. File existence check
         var configPath = Path.Combine(executableDirectory, "uptime-tracker.json");
         if (!File.Exists(configPath))
+        {
             throw new ConfigurationException($"Error: Configuration file not found: {configPath}");
+        }
 
         // 2. JSON deserialization
         var json = File.ReadAllText(configPath);
@@ -33,15 +35,25 @@ internal static class ConfigLoader
         }
 
         if (raw is null)
+        {
             throw new ConfigurationException("Error: Configuration file is empty or null.");
+        }
 
         // 3. Required keys
         if (raw.Warn is null)
+        {
             throw new ConfigurationException("Error: Missing required key 'warn' in configuration file.");
+        }
+
         if (raw.Reboot is null)
+        {
             throw new ConfigurationException("Error: Missing required key 'reboot' in configuration file.");
+        }
+
         if (raw.Overdue is null)
+        {
             throw new ConfigurationException("Error: Missing required key 'overdue' in configuration file.");
+        }
 
         // 4. Parse 'after' fields
         var warnAfter = ParseAfter(raw.Warn.After, "warn");
@@ -78,16 +90,21 @@ internal static class ConfigLoader
 
         // 6. Ascending order check
         if (warnAfter >= rebootAfter || rebootAfter >= overdueAfter)
+        {
             throw new ConfigurationException(
                 "Error: Threshold 'after' values must be in ascending order: warn < reboot < overdue.");
+        }
 
         // 7. flashIntervalMs validation
-        int flashIntervalMs = 1000;
+        var flashIntervalMs = 1000;
         if (raw.Overdue.FlashIntervalMs.HasValue)
         {
             if (raw.Overdue.FlashIntervalMs.Value <= 0)
+            {
                 throw new ConfigurationException(
                     $"Error: 'flashIntervalMs' in 'overdue' must be a positive integer (≥ 1). Got: {raw.Overdue.FlashIntervalMs.Value}.");
+            }
+
             flashIntervalMs = raw.Overdue.FlashIntervalMs.Value;
         }
 
@@ -110,13 +127,17 @@ internal static class ConfigLoader
     private static TimeSpan ParseAfter(string? value, string key)
     {
         if (value is null)
+        {
             throw new ConfigurationException(
                 $"Error: Invalid 'after' value '' for '{key}'. Expected HH:MM:SS with non-negative components.");
+        }
 
         var parts = value.Split(':');
         if (parts.Length != 3)
+        {
             throw new ConfigurationException(
                 $"Error: Invalid 'after' value '{value}' for '{key}'. Expected HH:MM:SS with non-negative components.");
+        }
 
         if (!int.TryParse(parts[0], out int hours) || hours < 0 ||
             !int.TryParse(parts[1], out int minutes) || minutes < 0 || minutes > 59 ||
@@ -136,11 +157,15 @@ internal static class ConfigLoader
     private static ConsoleColor? ParseOptionalColor(string? value, string key, string field)
     {
         if (value is null)
+        {
             return null;
+        }
 
         if (!Enum.TryParse<ConsoleColor>(value, ignoreCase: true, out var color))
+        {
             throw new ConfigurationException(
                 $"Error: '{value}' is not a valid ConsoleColor name in '{key}.{field}'.");
+        }
 
         return color;
     }
@@ -150,21 +175,25 @@ internal static class ConfigLoader
     /// </summary>
     private static FlashPair ParseFlashPair(RawFlashPair raw, string key, string field)
     {
-        ConsoleColor fg = ConsoleColor.White;
-        ConsoleColor bg = ConsoleColor.Black;
+        var fg = ConsoleColor.White;
+        var bg = ConsoleColor.Black;
 
         if (raw.Foreground is not null)
         {
             if (!Enum.TryParse<ConsoleColor>(raw.Foreground, ignoreCase: true, out fg))
+            {
                 throw new ConfigurationException(
                     $"Error: '{raw.Foreground}' is not a valid ConsoleColor name in '{key}.{field}.foreground'.");
+            }
         }
 
         if (raw.Background is not null)
         {
             if (!Enum.TryParse<ConsoleColor>(raw.Background, ignoreCase: true, out bg))
+            {
                 throw new ConfigurationException(
                     $"Error: '{raw.Background}' is not a valid ConsoleColor name in '{key}.{field}.background'.");
+            }
         }
 
         return new FlashPair(fg, bg);

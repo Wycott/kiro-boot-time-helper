@@ -6,11 +6,11 @@ namespace UptimeTracker;
 
 internal sealed class UptimeRenderer
 {
-    private readonly IBootTimeProvider _bootTimeProvider;
-    private readonly ThresholdConfiguration _config;
-    private readonly IConsoleWriter _console;
-    private readonly bool _testMode;
-    private readonly Func<int, CancellationToken, Task>? _delayFunc;
+    private readonly IBootTimeProvider bootTimeProvider;
+    private readonly ThresholdConfiguration config;
+    private readonly IConsoleWriter console;
+    private readonly bool testMode;
+    private readonly Func<int, CancellationToken, Task>? delayFunc;
 
     public UptimeRenderer(
         IBootTimeProvider bootTimeProvider,
@@ -19,49 +19,53 @@ internal sealed class UptimeRenderer
         bool testMode = false,
         Func<int, CancellationToken, Task>? delayFunc = null)
     {
-        _bootTimeProvider = bootTimeProvider;
-        _config = config;
-        _console = console;
-        _testMode = testMode;
-        _delayFunc = delayFunc;
+        this.bootTimeProvider = bootTimeProvider;
+        this.config = config;
+        this.console = console;
+        this.testMode = testMode;
+        this.delayFunc = delayFunc;
     }
 
     public async Task RunAsync(CancellationToken cancellationToken)
     {
         // Record the cursor row where uptime will be written in-place
-        int uptimeRow = _console.CursorTop;
+        var uptimeRow = console.CursorTop;
 
-        int flashTick = 0;
+        var flashTick = 0;
 
         try
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                var bootTime = _bootTimeProvider.GetBootTime();
+                var bootTime = bootTimeProvider.GetBootTime();
                 var uptime = DateTime.Now - bootTime;
-                var colorState = ThresholdResolver.Resolve(uptime, _config, flashTick);
+                var colorState = ThresholdResolver.Resolve(uptime, config, flashTick);
 
                 // Move cursor to the uptime line (in-place update)
-                _console.SetCursorPosition(0, uptimeRow);
+                console.SetCursorPosition(0, uptimeRow);
 
                 // Apply colors and write uptime
                 ApplyColors(colorState);
-                _console.Write(UptimeFormatter.Format(uptime));
-                _console.ResetColor();
+                console.Write(UptimeFormatter.Format(uptime));
+                console.ResetColor();
 
                 flashTick++;
 
                 // Determine delay based on state
-                int delayMs = colorState is ColorState.Overdue
-                    ? _config.Overdue.FlashIntervalMs
+                var delayMs = colorState is ColorState.Overdue
+                    ? config.Overdue.FlashIntervalMs
                     : 1000;
 
                 try
                 {
-                    if (_delayFunc != null)
-                        await _delayFunc(delayMs, cancellationToken);
+                    if (this.delayFunc != null)
+                    {
+                        await this.delayFunc(delayMs, cancellationToken);
+                    }
                     else
+                    {
                         await Task.Delay(delayMs, cancellationToken);
+                    }
                 }
                 catch (OperationCanceledException)
                 {
@@ -72,8 +76,8 @@ internal sealed class UptimeRenderer
         finally
         {
             // Cleanup: restore colors and print final newline
-            _console.ResetColor();
-            _console.WriteLine();
+            console.ResetColor();
+            console.WriteLine();
         }
     }
 
@@ -82,20 +86,24 @@ internal sealed class UptimeRenderer
         switch (colorState)
         {
             case ColorState.Warn warn:
-                _console.ForegroundColor = warn.Foreground;
+                console.ForegroundColor = warn.Foreground;
                 if (warn.Background.HasValue)
-                    _console.BackgroundColor = warn.Background.Value;
+                {
+                    console.BackgroundColor = warn.Background.Value;
+                }
                 break;
 
             case ColorState.Reboot reboot:
-                _console.ForegroundColor = reboot.Foreground;
+                console.ForegroundColor = reboot.Foreground;
                 if (reboot.Background.HasValue)
-                    _console.BackgroundColor = reboot.Background.Value;
+                {
+                    console.BackgroundColor = reboot.Background.Value;
+                }
                 break;
 
             case ColorState.Overdue overdue:
-                _console.ForegroundColor = overdue.ActivePair.Foreground;
-                _console.BackgroundColor = overdue.ActivePair.Background;
+                console.ForegroundColor = overdue.ActivePair.Foreground;
+                console.BackgroundColor = overdue.ActivePair.Background;
                 break;
 
             case ColorState.Default:

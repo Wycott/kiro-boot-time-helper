@@ -38,9 +38,13 @@ public class UptimeRendererTests
         {
             count++;
             if (count >= cancelAfterIterations)
+            {
                 cts.Cancel();
+            }
+
             return Task.CompletedTask;
         }
+
         return (DelayFunc, cts);
     }
 
@@ -312,6 +316,7 @@ public class UptimeRendererTests
         {
             cts.Cancel();
             ct.ThrowIfCancellationRequested();
+
             return Task.CompletedTask;
         }
 

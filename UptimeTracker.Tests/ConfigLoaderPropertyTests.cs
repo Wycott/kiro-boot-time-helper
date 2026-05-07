@@ -13,28 +13,30 @@ namespace UptimeTracker.Tests;
 
 public class ConfigLoaderPropertyTests : IDisposable
 {
-    private readonly string _tempDir;
+    private readonly string tempDir;
 
     public ConfigLoaderPropertyTests()
     {
-        _tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-        Directory.CreateDirectory(_tempDir);
+        tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        Directory.CreateDirectory(tempDir);
     }
 
     public void Dispose()
     {
-        if (Directory.Exists(_tempDir))
-            Directory.Delete(_tempDir, recursive: true);
+        if (Directory.Exists(tempDir))
+        {
+            Directory.Delete(tempDir, recursive: true);
+        }
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────────────
 
     private void WriteConfig(string json)
     {
-        File.WriteAllText(Path.Combine(_tempDir, "uptime-tracker.json"), json);
+        File.WriteAllText(Path.Combine(tempDir, "uptime-tracker.json"), json);
     }
 
-    private AppConfiguration Load() => ConfigLoader.Load(_tempDir);
+    private AppConfiguration Load() => ConfigLoader.Load(tempDir);
 
     /// <summary>
     /// Returns true if the string is a valid HH:MM:SS duration
@@ -43,10 +45,26 @@ public class ConfigLoaderPropertyTests : IDisposable
     private static bool IsValidAfter(string s)
     {
         var parts = s.Split(':');
-        if (parts.Length != 3) return false;
-        if (!int.TryParse(parts[0], out int h) || h < 0) return false;
-        if (!int.TryParse(parts[1], out int m) || m < 0 || m > 59) return false;
-        if (!int.TryParse(parts[2], out int sec) || sec < 0 || sec > 59) return false;
+        if (parts.Length != 3)
+        {
+            return false;
+        }
+
+        if (!int.TryParse(parts[0], out int h) || h < 0)
+        {
+            return false;
+        }
+
+        if (!int.TryParse(parts[1], out int m) || m < 0 || m > 59)
+        {
+            return false;
+        }
+
+        if (!int.TryParse(parts[2], out int sec) || sec < 0 || sec > 59)
+        {
+            return false;
+        }
+
         return true;
     }
 
@@ -92,6 +110,7 @@ public class ConfigLoaderPropertyTests : IDisposable
             try
             {
                 Load();
+
                 return false; // Should have thrown
             }
             catch (ConfigurationException)
@@ -131,6 +150,7 @@ public class ConfigLoaderPropertyTests : IDisposable
             try
             {
                 Load();
+
                 return false; // Should have thrown
             }
             catch (ConfigurationException)
@@ -179,6 +199,7 @@ public class ConfigLoaderPropertyTests : IDisposable
             try
             {
                 Load();
+
                 return false; // Should have thrown
             }
             catch (ConfigurationException)

@@ -73,7 +73,10 @@ public class UptimeRendererPropertyTests
                     recordedDelays.Add(ms);
                     callCount++;
                     if (callCount >= 1)
+                    {
                         cts.Cancel();
+                    }
+
                     return Task.CompletedTask;
                 }
 
@@ -129,7 +132,10 @@ public class UptimeRendererPropertyTests
                     recordedDelays.Add(ms);
                     callCount++;
                     if (callCount >= 1)
+                    {
                         cts.Cancel();
+                    }
+
                     return Task.CompletedTask;
                 }
 

@@ -39,7 +39,10 @@ internal sealed class Program
             var bootTime = bootTimeProvider.GetBootTime();
             var bootTimeLine = $"Boot time: {bootTime:yyyy-MM-dd HH:mm:ss}";
             if (appConfig.TestMode)
+            {
                 bootTimeLine += " [TEST MODE]";
+            }
+
             System.Console.WriteLine(bootTimeLine);
 
             // 6. Enter render loop
@@ -61,11 +64,13 @@ internal sealed class Program
         catch (ConfigurationException ex)
         {
             System.Console.Error.WriteLine(ex.Message);
+
             return ex.ExitCode;
         }
         catch (Exception ex)
         {
             System.Console.Error.WriteLine($"Error: Unable to retrieve system boot time: {ex.Message}");
+
             return 1;
         }
     }

@@ -2,12 +2,12 @@ namespace UptimeTracker.BootTime;
 
 internal sealed class TestBootTimeProvider : IBootTimeProvider
 {
-    private readonly DateTime _startTime;
+    private readonly DateTime startTime;
 
     public TestBootTimeProvider(DateTime startTime)
     {
-        _startTime = startTime;
+        this.startTime = startTime;
     }
 
-    public DateTime GetBootTime() => _startTime;
+    public DateTime GetBootTime() => startTime;
 }

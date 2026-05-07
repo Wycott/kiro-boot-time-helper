@@ -7,28 +7,30 @@ namespace UptimeTracker.Tests;
 
 public class ConfigLoaderTests : IDisposable
 {
-    private readonly string _tempDir;
+    private readonly string tempDir;
 
     public ConfigLoaderTests()
     {
-        _tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-        Directory.CreateDirectory(_tempDir);
+        tempDir = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        Directory.CreateDirectory(tempDir);
     }
 
     public void Dispose()
     {
-        if (Directory.Exists(_tempDir))
-            Directory.Delete(_tempDir, recursive: true);
+        if (Directory.Exists(tempDir))
+        {
+            Directory.Delete(tempDir, recursive: true);
+        }
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────────────
 
     private void WriteConfig(string json)
     {
-        File.WriteAllText(Path.Combine(_tempDir, "uptime-tracker.json"), json);
+        File.WriteAllText(Path.Combine(tempDir, "uptime-tracker.json"), json);
     }
 
-    private AppConfiguration Load() => ConfigLoader.Load(_tempDir);
+    private AppConfiguration Load() => ConfigLoader.Load(tempDir);
 
     // ── Valid configuration tests ─────────────────────────────────────────────────
 
@@ -178,7 +180,7 @@ public class ConfigLoaderTests : IDisposable
     {
         // Don't write any file — directory is empty
         var ex = Assert.Throws<ConfigurationException>(() => Load());
-        Assert.Contains(_tempDir, ex.Message);
+        Assert.Contains(tempDir, ex.Message);
     }
 
     [Fact]

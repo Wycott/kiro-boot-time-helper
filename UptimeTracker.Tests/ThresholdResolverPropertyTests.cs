@@ -74,13 +74,19 @@ public class ThresholdResolverPropertyTests
             var result = ThresholdResolver.Resolve(uptime, config, 0);
 
             if (uptime >= config.Overdue.After)
+            {
                 return result is ColorState.Overdue;
+            }
 
             if (uptime >= config.Reboot.After)
+            {
                 return result is ColorState.Reboot;
+            }
 
             if (uptime >= config.Warn.After)
+            {
                 return result is ColorState.Warn;
+            }
 
             return result is ColorState.Default;
         });
@@ -128,12 +134,16 @@ public class ThresholdResolverPropertyTests
                 if (flashTick % 2 == 0)
                 {
                     if (!result.ActivePair.Equals(config.Overdue.PairA))
+                    {
                         return false;
+                    }
                 }
                 else
                 {
                     if (!result.ActivePair.Equals(config.Overdue.PairB))
+                    {
                         return false;
+                    }
                 }
             }
 

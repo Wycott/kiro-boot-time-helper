@@ -21,25 +21,25 @@ internal sealed class FakeConsoleWriter : IConsoleWriter
     public List<ConsoleColor> BackgroundColors { get; } = new();
 
     // Current color state
-    private ConsoleColor _foregroundColor = ConsoleColor.Gray;
-    private ConsoleColor _backgroundColor = ConsoleColor.Black;
+    private ConsoleColor foregroundColor = ConsoleColor.Gray;
+    private ConsoleColor backgroundColor = ConsoleColor.Black;
 
     public ConsoleColor ForegroundColor
     {
-        get => _foregroundColor;
+        get => foregroundColor;
         set
         {
-            _foregroundColor = value;
+            foregroundColor = value;
             ForegroundColors.Add(value);
         }
     }
 
     public ConsoleColor BackgroundColor
     {
-        get => _backgroundColor;
+        get => backgroundColor;
         set
         {
-            _backgroundColor = value;
+            backgroundColor = value;
             BackgroundColors.Add(value);
         }
     }

@@ -39,12 +39,14 @@ public class UptimeFormatterPropertyTests
                 var match = Regex.Match(formatted, @"^(\d+)d (\d{2})h (\d{2})m (\d{2})s$");
 
                 if (!match.Success)
+                {
                     return false;
+                }
 
-                int parsedDays    = int.Parse(match.Groups[1].Value);
-                int parsedHours   = int.Parse(match.Groups[2].Value);
-                int parsedMinutes = int.Parse(match.Groups[3].Value);
-                int parsedSeconds = int.Parse(match.Groups[4].Value);
+                var parsedDays    = int.Parse(match.Groups[1].Value);
+                var parsedHours   = int.Parse(match.Groups[2].Value);
+                var parsedMinutes = int.Parse(match.Groups[3].Value);
+                var parsedSeconds = int.Parse(match.Groups[4].Value);
 
                 return parsedDays    == (int)t.TotalDays
                     && parsedHours   == t.Hours
