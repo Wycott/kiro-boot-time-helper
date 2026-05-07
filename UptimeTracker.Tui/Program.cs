@@ -44,7 +44,10 @@ internal sealed class Program
 
             System.Console.WriteLine(bootTimeLine);
 
-            // 6. Enter render loop
+            // 6. Show configuration summary with styled previews
+            PrintConfigSummary(appConfig);
+
+            // 7. Enter render loop
             var consoleWriter = new ConsoleWriter();
             var renderer = new UptimeRenderer(
                 bootTimeProvider,
@@ -54,7 +57,7 @@ internal sealed class Program
 
             await renderer.RunAsync(cts.Token);
 
-            // 7. Restore original console colors (belt and suspenders — renderer also resets)
+            // 8. Restore original console colors (belt and suspenders — renderer also resets)
             System.Console.ForegroundColor = originalForeground;
             System.Console.BackgroundColor = originalBackground;
 
@@ -72,5 +75,57 @@ internal sealed class Program
 
             return 1;
         }
+    }
+
+    private static void PrintConfigSummary(Models.AppConfiguration appConfig)
+    {
+        var thresholds = appConfig.Thresholds;
+
+        System.Console.WriteLine();
+        System.Console.WriteLine("Configuration:");
+        System.Console.WriteLine($"  Test mode: {(appConfig.TestMode ? "ON" : "OFF")}");
+        System.Console.WriteLine();
+
+        // Warn threshold
+        System.Console.Write($"  Warn     (after {FormatThreshold(thresholds.Warn.After)}): ");
+        System.Console.ForegroundColor = thresholds.Warn.Foreground;
+        if (thresholds.Warn.Background.HasValue)
+        {
+            System.Console.BackgroundColor = thresholds.Warn.Background.Value;
+        }
+        System.Console.Write("SAMPLE TEXT");
+        System.Console.ResetColor();
+        System.Console.WriteLine();
+
+        // Reboot threshold
+        System.Console.Write($"  Reboot   (after {FormatThreshold(thresholds.Reboot.After)}): ");
+        System.Console.ForegroundColor = thresholds.Reboot.Foreground;
+        if (thresholds.Reboot.Background.HasValue)
+        {
+            System.Console.BackgroundColor = thresholds.Reboot.Background.Value;
+        }
+        System.Console.Write("SAMPLE TEXT");
+        System.Console.ResetColor();
+        System.Console.WriteLine();
+
+        // Overdue threshold
+        System.Console.Write($"  Overdue  (after {FormatThreshold(thresholds.Overdue.After)}, flash {thresholds.Overdue.FlashIntervalMs}ms): ");
+        System.Console.ForegroundColor = thresholds.Overdue.PairA.Foreground;
+        System.Console.BackgroundColor = thresholds.Overdue.PairA.Background;
+        System.Console.Write("FLASH");
+        System.Console.ResetColor();
+        System.Console.Write(" / ");
+        System.Console.ForegroundColor = thresholds.Overdue.PairB.Foreground;
+        System.Console.BackgroundColor = thresholds.Overdue.PairB.Background;
+        System.Console.Write("FLASH");
+        System.Console.ResetColor();
+        System.Console.WriteLine();
+
+        System.Console.WriteLine();
+    }
+
+    private static string FormatThreshold(TimeSpan ts)
+    {
+        return $"{(int)ts.TotalHours:D2}:{ts.Minutes:D2}:{ts.Seconds:D2}";
     }
 }
