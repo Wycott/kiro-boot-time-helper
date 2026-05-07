@@ -20,10 +20,10 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore NuGet packages
-        run: dotnet restore
+        run: dotnet restore UptimeTracker.sln
 
       - name: Build solution
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build UptimeTracker.sln --no-restore --configuration Release
 
       - name: Run tests
-        run: dotnet test --no-build --configuration Release --verbosity normal
+        run: dotnet test UptimeTracker.sln --no-build --configuration Release --verbosity normal
