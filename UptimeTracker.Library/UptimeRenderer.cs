@@ -28,6 +28,9 @@ internal sealed class UptimeRenderer
 
     public async Task RunAsync(CancellationToken cancellationToken)
     {
+        // Hide the cursor
+        console.Write("\x1b[?25l");
+
         // Record the cursor row where uptime will be written in-place
         var uptimeRow = console.CursorTop;
 
@@ -44,9 +47,10 @@ internal sealed class UptimeRenderer
                 // Move cursor to the uptime line (in-place update)
                 console.SetCursorPosition(0, uptimeRow);
 
-                // Apply colors and write uptime
+                // Write "Uptime:" label in bold (ANSI escape), then the value in color
+                console.Write("\x1b[1mUptime:\x1b[0m ");
                 ApplyColors(colorState);
-                console.Write(UptimeFormatter.Format(uptime));
+                console.Write($"{UptimeFormatter.Format(uptime)}   ");
                 console.ResetColor();
 
                 flashTick++;
@@ -75,7 +79,8 @@ internal sealed class UptimeRenderer
         }
         finally
         {
-            // Cleanup: restore colors and print final newline
+            // Cleanup: show cursor, restore colors and print final newline
+            console.Write("\x1b[?25h");
             console.ResetColor();
             console.WriteLine();
         }

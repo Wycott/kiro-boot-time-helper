@@ -299,8 +299,11 @@ public class UptimeRendererTests
         // Act
         await renderer.RunAsync(cts.Token);
 
-        // Assert: exactly 2 Write calls (one per iteration), no more
-        Assert.Equal(2, console.WrittenTexts.Count);
+        // Assert: after cancellation, no further uptime value writes occur beyond the 2 iterations
+        // Each iteration writes: cursor-hide (once at start), bold label, and uptime value
+        // Filter to just the uptime value writes (those matching the format pattern)
+        var uptimeWrites = console.WrittenTexts.Where(t => t.Contains("d ") && t.Contains("h ") && t.Contains("m ") && t.Contains("s")).ToList();
+        Assert.Equal(2, uptimeWrites.Count);
     }
 
     [Fact]
