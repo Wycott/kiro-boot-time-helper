@@ -1,4 +1,3 @@
-using UptimeTracker;
 using UptimeTracker.BootTime;
 using UptimeTracker.Models;
 using UptimeTracker.Tests.TestHelpers;
@@ -33,10 +32,12 @@ public class UptimeRendererTests
         MakeControlledDelay(int cancelAfterIterations)
     {
         var cts = new CancellationTokenSource();
-        int count = 0;
+        var count = 0;
+
         Task DelayFunc(int ms, CancellationToken ct)
         {
             count++;
+
             if (count >= cancelAfterIterations)
             {
                 cts.Cancel();

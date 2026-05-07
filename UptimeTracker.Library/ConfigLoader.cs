@@ -139,9 +139,9 @@ internal static class ConfigLoader
                 $"Error: Invalid 'after' value '{value}' for '{key}'. Expected HH:MM:SS with non-negative components.");
         }
 
-        if (!int.TryParse(parts[0], out int hours) || hours < 0 ||
-            !int.TryParse(parts[1], out int minutes) || minutes < 0 || minutes > 59 ||
-            !int.TryParse(parts[2], out int seconds) || seconds < 0 || seconds > 59)
+        if (!int.TryParse(parts[0], out var hours) || hours < 0 ||
+            !int.TryParse(parts[1], out var minutes) || minutes < 0 || minutes > 59 ||
+            !int.TryParse(parts[2], out var seconds) || seconds < 0 || seconds > 59)
         {
             throw new ConfigurationException(
                 $"Error: Invalid 'after' value '{value}' for '{key}'. Expected HH:MM:SS with non-negative components.");

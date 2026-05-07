@@ -3,7 +3,6 @@
 using FsCheck;
 using FsCheck.Fluent;
 using FsCheck.Xunit;
-using UptimeTracker;
 using UptimeTracker.BootTime;
 using UptimeTracker.Models;
 using UptimeTracker.Tests.TestHelpers;
@@ -66,7 +65,7 @@ public class UptimeRendererPropertyTests
                 // Capture delay values
                 var recordedDelays = new List<int>();
                 var cts = new CancellationTokenSource();
-                int callCount = 0;
+                var callCount = 0;
 
                 Task DelayFunc(int ms, CancellationToken ct)
                 {
@@ -125,7 +124,7 @@ public class UptimeRendererPropertyTests
 
                 var recordedDelays = new List<int>();
                 var cts = new CancellationTokenSource();
-                int callCount = 0;
+                var callCount = 0;
 
                 Task DelayFunc(int ms, CancellationToken ct)
                 {

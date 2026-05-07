@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using FsCheck;
 using FsCheck.Fluent;
 using FsCheck.Xunit;
-using UptimeTracker;
 
 namespace UptimeTracker.Tests;
 
@@ -33,7 +32,7 @@ public class UptimeFormatterPropertyTests
             UptimeArb,
             t =>
             {
-                string formatted = UptimeFormatter.Format(t);
+                var formatted = UptimeFormatter.Format(t);
 
                 // Parse "Xd HHh MMm SSs"
                 var match = Regex.Match(formatted, @"^(\d+)d (\d{2})h (\d{2})m (\d{2})s$");

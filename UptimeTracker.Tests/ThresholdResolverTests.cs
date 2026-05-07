@@ -1,4 +1,3 @@
-using UptimeTracker;
 using UptimeTracker.Models;
 
 namespace UptimeTracker.Tests;

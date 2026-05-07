@@ -5,7 +5,6 @@
 using FsCheck;
 using FsCheck.Fluent;
 using FsCheck.Xunit;
-using UptimeTracker;
 using UptimeTracker.Exceptions;
 using UptimeTracker.Models;
 
@@ -50,17 +49,17 @@ public class ConfigLoaderPropertyTests : IDisposable
             return false;
         }
 
-        if (!int.TryParse(parts[0], out int h) || h < 0)
+        if (!int.TryParse(parts[0], out var h) || h < 0)
         {
             return false;
         }
 
-        if (!int.TryParse(parts[1], out int m) || m < 0 || m > 59)
+        if (!int.TryParse(parts[1], out var m) || m < 0 || m > 59)
         {
             return false;
         }
 
-        if (!int.TryParse(parts[2], out int sec) || sec < 0 || sec > 59)
+        if (!int.TryParse(parts[2], out var sec) || sec < 0 || sec > 59)
         {
             return false;
         }

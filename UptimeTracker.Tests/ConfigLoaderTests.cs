@@ -1,5 +1,3 @@
-using System.Text.Json;
-using UptimeTracker;
 using UptimeTracker.Exceptions;
 using UptimeTracker.Models;
 

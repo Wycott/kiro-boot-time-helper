@@ -1,7 +1,6 @@
 ﻿using UptimeTracker.BootTime;
 using UptimeTracker.Console;
 using UptimeTracker.Exceptions;
-using UptimeTracker.Models;
 
 namespace UptimeTracker;
 

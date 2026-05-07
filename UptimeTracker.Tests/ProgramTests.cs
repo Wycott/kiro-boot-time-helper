@@ -1,5 +1,3 @@
-using UptimeTracker;
-
 namespace UptimeTracker.Tests;
 
 public class ProgramTests

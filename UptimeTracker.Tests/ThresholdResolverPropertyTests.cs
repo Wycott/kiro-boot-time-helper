@@ -4,7 +4,6 @@
 using FsCheck;
 using FsCheck.Fluent;
 using FsCheck.Xunit;
-using UptimeTracker;
 using UptimeTracker.Models;
 
 namespace UptimeTracker.Tests;
@@ -126,9 +125,9 @@ public class ThresholdResolverPropertyTests
         {
             var (start, length) = pair;
 
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
-                int flashTick = start + i;
+                var flashTick = start + i;
                 var result = (ColorState.Overdue)ThresholdResolver.Resolve(overdueUptime, config, flashTick);
 
                 if (flashTick % 2 == 0)
