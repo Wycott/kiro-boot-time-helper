@@ -1,0 +1,6 @@
+{
+  "testMode": true,
+  "warn":    { "after": "00:00:30" },
+  "reboot":  { "after": "00:01:00" },
+  "overdue": { "after": "00:01:30", "flashIntervalMs": 500 }
+}

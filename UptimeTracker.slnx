@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="UptimeTracker.Tests/UptimeTracker.Tests.csproj" />
+  <Project Path="UptimeTracker/UptimeTracker.csproj" />
+</Solution>
