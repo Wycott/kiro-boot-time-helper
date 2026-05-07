@@ -1,0 +1,21 @@
+{
+  "testMode": true,
+  "warn": {
+    "after": "00:01:00",
+    "foreground": "DarkYellow",
+    "background": "Black"
+  },
+  "reboot": {
+    "after": "00:02:00",
+    "foreground": "Red",
+    "background": "DarkGray"
+  },
+  "overdue": {
+    "after": "00:03:00",
+    "flashIntervalMs": 500,
+    "flash": [
+      { "foreground": "White", "background": "DarkRed" },
+      { "foreground": "DarkRed", "background": "White" }
+    ]
+  }
+}
