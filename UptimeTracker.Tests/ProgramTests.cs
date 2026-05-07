@@ -20,7 +20,7 @@ public class ProgramTests
             // Actually, let's capture stderr by redirecting Console.Error
             var originalError = System.Console.Error;
 
-            using var errorWriter = new StringWriter();
+            await using var errorWriter = new StringWriter();
             
             System.Console.SetError(errorWriter);
 

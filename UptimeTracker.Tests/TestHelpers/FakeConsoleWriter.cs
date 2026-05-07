@@ -13,12 +13,12 @@ internal sealed class FakeConsoleWriter : IConsoleWriter
     public int CursorTop => CursorTopValue;
 
     // Recorded state
-    public List<string> WrittenTexts { get; } = new();
-    public List<string> WrittenLines { get; } = new();
-    public List<(int Left, int Top)> SetCursorPositionCalls { get; } = new();
+    public List<string> WrittenTexts { get; } = [];
+    public List<string> WrittenLines { get; } = [];
+    public List<(int Left, int Top)> SetCursorPositionCalls { get; } = [];
     public int ResetColorCallCount { get; private set; }
-    public List<ConsoleColor> ForegroundColors { get; } = new();
-    public List<ConsoleColor> BackgroundColors { get; } = new();
+    public List<ConsoleColor> ForegroundColors { get; } = [];
+    public List<ConsoleColor> BackgroundColors { get; } = [];
 
     // Current color state
     private ConsoleColor foregroundColor = ConsoleColor.Gray;
