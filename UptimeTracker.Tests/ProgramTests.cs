@@ -19,13 +19,16 @@ public class ProgramTests
 
             // Actually, let's capture stderr by redirecting Console.Error
             var originalError = System.Console.Error;
+
             using var errorWriter = new StringWriter();
+            
             System.Console.SetError(errorWriter);
 
             // We can't easily change AppContext.BaseDirectory, so let's test
             // the error path by ensuring ConfigLoader throws for missing file
-            var ex = Assert.Throws<UptimeTracker.Exceptions.ConfigurationException>(
+            var ex = Assert.Throws<Exceptions.ConfigurationException>(
                 () => ConfigLoader.Load(tempDir));
+
             Assert.Contains(tempDir, ex.Message);
             Assert.Equal(1, ex.ExitCode);
 

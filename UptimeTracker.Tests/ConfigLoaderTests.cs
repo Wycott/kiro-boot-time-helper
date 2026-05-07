@@ -168,6 +168,7 @@ public class ConfigLoaderTests : IDisposable
             """);
 
         var config = Load();
+
         Assert.Equal(1, config.Thresholds.Overdue.FlashIntervalMs);
     }
 
@@ -178,6 +179,7 @@ public class ConfigLoaderTests : IDisposable
     {
         // Don't write any file — directory is empty
         var ex = Assert.Throws<ConfigurationException>(() => Load());
+
         Assert.Contains(tempDir, ex.Message);
     }
 
@@ -192,6 +194,7 @@ public class ConfigLoaderTests : IDisposable
             """);
 
         var ex = Assert.Throws<ConfigurationException>(() => Load());
+
         Assert.Contains("warn", ex.Message);
     }
 
@@ -206,6 +209,7 @@ public class ConfigLoaderTests : IDisposable
             """);
 
         var ex = Assert.Throws<ConfigurationException>(() => Load());
+
         Assert.Contains("reboot", ex.Message);
     }
 
@@ -220,6 +224,7 @@ public class ConfigLoaderTests : IDisposable
             """);
 
         var ex = Assert.Throws<ConfigurationException>(() => Load());
+
         Assert.Contains("overdue", ex.Message);
     }
 
@@ -319,6 +324,7 @@ public class ConfigLoaderTests : IDisposable
             """);
 
         var ex = Assert.Throws<ConfigurationException>(() => Load());
+
         Assert.Contains("NotAColor", ex.Message);
     }
 

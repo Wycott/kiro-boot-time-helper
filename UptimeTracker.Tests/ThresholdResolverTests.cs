@@ -26,6 +26,7 @@ public class ThresholdResolverTests
     public void Resolve_ZeroUptime_ReturnsDefault()
     {
         var result = ThresholdResolver.Resolve(TimeSpan.Zero, DefaultConfig, 0);
+
         Assert.IsType<ColorState.Default>(result);
     }
 
@@ -34,6 +35,7 @@ public class ThresholdResolverTests
     {
         var uptime = TimeSpan.FromHours(2) - TimeSpan.FromSeconds(1); // 1h 59m 59s
         var result = ThresholdResolver.Resolve(uptime, DefaultConfig, 0);
+
         Assert.IsType<ColorState.Default>(result);
     }
 
@@ -42,6 +44,7 @@ public class ThresholdResolverTests
     {
         var uptime = TimeSpan.FromHours(2); // 2h 0m 0s
         var result = ThresholdResolver.Resolve(uptime, DefaultConfig, 0);
+
         Assert.IsType<ColorState.Warn>(result);
     }
 
@@ -50,6 +53,7 @@ public class ThresholdResolverTests
     {
         var uptime = TimeSpan.FromHours(2) + TimeSpan.FromSeconds(1); // 2h 0m 1s
         var result = ThresholdResolver.Resolve(uptime, DefaultConfig, 0);
+        
         Assert.IsType<ColorState.Warn>(result);
     }
 
@@ -58,6 +62,7 @@ public class ThresholdResolverTests
     {
         var uptime = TimeSpan.FromHours(6) - TimeSpan.FromSeconds(1); // 5h 59m 59s
         var result = ThresholdResolver.Resolve(uptime, DefaultConfig, 0);
+
         Assert.IsType<ColorState.Warn>(result);
     }
 
@@ -66,6 +71,7 @@ public class ThresholdResolverTests
     {
         var uptime = TimeSpan.FromHours(6); // 6h 0m 0s
         var result = ThresholdResolver.Resolve(uptime, DefaultConfig, 0);
+        
         Assert.IsType<ColorState.Reboot>(result);
     }
 
@@ -74,6 +80,7 @@ public class ThresholdResolverTests
     {
         var uptime = TimeSpan.FromHours(6) + TimeSpan.FromSeconds(1); // 6h 0m 1s
         var result = ThresholdResolver.Resolve(uptime, DefaultConfig, 0);
+       
         Assert.IsType<ColorState.Reboot>(result);
     }
 
@@ -82,6 +89,7 @@ public class ThresholdResolverTests
     {
         var uptime = TimeSpan.FromHours(12) - TimeSpan.FromSeconds(1); // 11h 59m 59s
         var result = ThresholdResolver.Resolve(uptime, DefaultConfig, 0);
+        
         Assert.IsType<ColorState.Reboot>(result);
     }
 
@@ -90,6 +98,7 @@ public class ThresholdResolverTests
     {
         var uptime = TimeSpan.FromHours(12); // 12h 0m 0s
         var result = ThresholdResolver.Resolve(uptime, DefaultConfig, 0);
+        
         Assert.IsType<ColorState.Overdue>(result);
     }
 
@@ -98,6 +107,7 @@ public class ThresholdResolverTests
     {
         var uptime = TimeSpan.FromHours(12) + TimeSpan.FromSeconds(1); // 12h 0m 1s
         var result = ThresholdResolver.Resolve(uptime, DefaultConfig, 0);
+        
         Assert.IsType<ColorState.Overdue>(result);
     }
 
@@ -112,6 +122,7 @@ public class ThresholdResolverTests
     public void Resolve_EvenFlashTick_ReturnsPairA(int flashTick)
     {
         var result = (ColorState.Overdue)ThresholdResolver.Resolve(OverdueUptime, DefaultConfig, flashTick);
+
         Assert.Equal(DefaultConfig.Overdue.PairA, result.ActivePair);
     }
 
@@ -122,6 +133,7 @@ public class ThresholdResolverTests
     public void Resolve_OddFlashTick_ReturnsPairB(int flashTick)
     {
         var result = (ColorState.Overdue)ThresholdResolver.Resolve(OverdueUptime, DefaultConfig, flashTick);
+
         Assert.Equal(DefaultConfig.Overdue.PairB, result.ActivePair);
     }
 
@@ -132,6 +144,7 @@ public class ThresholdResolverTests
     {
         var uptime = TimeSpan.FromHours(3);
         var result = (ColorState.Warn)ThresholdResolver.Resolve(uptime, DefaultConfig, 0);
+
         Assert.Equal(ConsoleColor.Yellow, result.Foreground);
         Assert.Null(result.Background);
     }
@@ -141,6 +154,7 @@ public class ThresholdResolverTests
     {
         var uptime = TimeSpan.FromHours(8);
         var result = (ColorState.Reboot)ThresholdResolver.Resolve(uptime, DefaultConfig, 0);
+
         Assert.Equal(ConsoleColor.Red, result.Foreground);
         Assert.Null(result.Background);
     }
@@ -154,6 +168,7 @@ public class ThresholdResolverTests
         };
         var uptime = TimeSpan.FromHours(3);
         var result = (ColorState.Warn)ThresholdResolver.Resolve(uptime, config, 0);
+
         Assert.Equal(ConsoleColor.Cyan, result.Foreground);
     }
 
@@ -166,6 +181,7 @@ public class ThresholdResolverTests
         };
         var uptime = TimeSpan.FromHours(8);
         var result = (ColorState.Reboot)ThresholdResolver.Resolve(uptime, config, 0);
+
         Assert.Equal(ConsoleColor.DarkBlue, result.Background);
     }
 
@@ -173,6 +189,7 @@ public class ThresholdResolverTests
     public void Resolve_DefaultFlashPairs_PairAIsRedOnWhite()
     {
         var result = (ColorState.Overdue)ThresholdResolver.Resolve(OverdueUptime, DefaultConfig, 0);
+
         Assert.Equal(ConsoleColor.Red, result.ActivePair.Foreground);
         Assert.Equal(ConsoleColor.White, result.ActivePair.Background);
     }
@@ -181,6 +198,7 @@ public class ThresholdResolverTests
     public void Resolve_DefaultFlashPairs_PairBIsWhiteOnRed()
     {
         var result = (ColorState.Overdue)ThresholdResolver.Resolve(OverdueUptime, DefaultConfig, 1);
+
         Assert.Equal(ConsoleColor.White, result.ActivePair.Foreground);
         Assert.Equal(ConsoleColor.Red, result.ActivePair.Background);
     }

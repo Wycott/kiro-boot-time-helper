@@ -44,6 +44,7 @@ public class ConfigLoaderPropertyTests : IDisposable
     private static bool IsValidAfter(string s)
     {
         var parts = s.Split(':');
+
         if (parts.Length != 3)
         {
             return false;
