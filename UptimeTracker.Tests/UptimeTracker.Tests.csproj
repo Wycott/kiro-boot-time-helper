@@ -21,7 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UptimeTracker\UptimeTracker.csproj" />
+    <ProjectReference Include="..\UptimeTracker.Library\UptimeTracker.Library.csproj" />
+    <ProjectReference Include="..\UptimeTracker.Tui\UptimeTracker.Tui.csproj" />
   </ItemGroup>
 
 </Project>
